@@ -1,31 +1,35 @@
-const express = require("express");
+const express = require('express');
 const api = express();
-require("dotenv").config();
-const porta = process.env.PORTA_API;
+require('dotenv').config();
+const porta = process.env.PORTA;
+
+const mongoose = require('mongoose');
 const enderecoBanco = process.env.URL_BD;
-
-const mongoose = require("mongoose");
-
+console.log(enderecoBanco);
 mongoose.connect(enderecoBanco);
 
-mongoose.connection.on("connected", () => {
-    console.log("[AVISO]: Aplicação conectada ao BD!");
+mongoose.connection.on('error', function(erro) {
+    console.log('Erro na conexão com o BD ' + erro);
 });
 
-mongoose.connection.on("disconnected", () => {
-    console.log("[AVISO]: Aplicação desconectada do BD!");
+mongoose.connection.on('disconnected', function() {
+    console.log('Aplicação desconectada do BD');
 });
 
-mongoose.connection.on("error", (erro) => {
-    console.log("[AVISO]: Erro ao conectar ao BD!");
-    console.log(erro);
-});
-api.listen(porta, () => {
-    console.log("API rodando na porta " + porta);
+mongoose.connection.on('connected', function() {
+    console.log('Aplicação conectada ao BD');
 });
 
-api.get("/status", (req, res) => {
-    res.send({ mensagem: "API online!"});
+api.listen(porta, function () {
+    console.log('Aplicação rodando na porta ' + porta);
 });
 
-//npm i dotenv
+// localhost:3000 OU IP_API:3000
+api.get('/status', (req, res) => {
+    res.send({ mensagem: 'API online' });
+});
+
+const produtosController = require('./controller/produtos');
+api.get('/produtos', produtosController.ListarProdutos);
+api.post('/produtos', produtosController.adicionarProduto);
+api.delete('/produto', produtosController.removerProduto)

@@ -1,0 +1,14 @@
+Criar projeto node com npm:
+npm init
+
+Instalar o Express no projeto:
+npm install express
+
+Instalar o Mongoose no projeto:
+npm install mongoose
+
+Instalar o dotenv no projeto:
+npm install dotenv
+
+Puxar dependências (pasta node_modules):
+npm install
